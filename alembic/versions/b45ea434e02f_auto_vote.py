@@ -13,7 +13,7 @@ from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
 revision: str = 'b45ea434e02f'
-down_revision: Union[str, None] = 'dc5da9d26fde'
+down_revision: Union[str, None] = 'da3235f9bdf0'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -27,6 +27,13 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('user_id', 'post_id')
     )
+    op.alter_column('posts', 'published',
+               existing_type=sa.BOOLEAN(),
+               nullable=False)
+    op.alter_column('posts', 'created_at',
+               existing_type=postgresql.TIME(timezone=True),
+               type_=sa.TIMESTAMP(timezone=True),
+               nullable=False)
     # ### end Alembic commands ###
 
 
